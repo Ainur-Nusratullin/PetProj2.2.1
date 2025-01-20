@@ -12,29 +12,33 @@ import java.util.List;
 @Repository
 public class UserDaoImp implements UserDao {
 
-   @Autowired
-   private SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
 
-   @Override
-   public void add(User user) {
-      sessionFactory.getCurrentSession().save(user);
-   }
+    @Autowired
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
-   @Override
-   @SuppressWarnings("unchecked")
-   public List<User> listUsers() {
-      TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery("from User");
-      return query.getResultList();
-   }
+    @Override
+    public void add(User user) {
+        sessionFactory.getCurrentSession().save(user);
+    }
 
-   @Override
-   public User getUserByCar(String model, int series) {
-      String HQL = "SELECT u FROM User u WHERE u.car.model = :model and car.series = :series ";
-      TypedQuery<User> typedQuery = sessionFactory.getCurrentSession().createQuery(HQL, User.class);
-      typedQuery.setParameter("model", model);
-      typedQuery.setParameter("series", series);
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<User> listUsers() {
+        TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery("from User");
+        return query.getResultList();
+    }
 
-      return typedQuery.getResultList().get(0);
-   }
+    @Override
+    public User getUserByCar(String model, int series) {
+        String HQL = "SELECT u FROM User u WHERE u.car.model = :model and car.series = :series ";
+        TypedQuery<User> typedQuery = sessionFactory.getCurrentSession().createQuery(HQL, User.class);
+        typedQuery.setParameter("model", model);
+        typedQuery.setParameter("series", series);
+
+        return typedQuery.getResultList().get(0);
+    }
 
 }
